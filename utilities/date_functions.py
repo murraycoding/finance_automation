@@ -1,4 +1,5 @@
 from datetime import datetime, date
+import re
 
 def format_date(month, day, year = None):
     """
@@ -35,3 +36,25 @@ def format_date(month, day, year = None):
         raise value_error
 
     return date_obj
+
+def extract_date_from_string(string, date_format= 'YYYY-MM-DD'):
+    """
+    Extracts the date from a string
+    """
+    if date_format == 'YYYY-MM-DD':
+        date_regex = re.compile(r'(\d{4})-(\d{2})-(\d{2})')
+    else:
+        date_regex = re.compile(r'(\d{2})-(\d{2})-(\d{4})')
+        
+    try:
+        date_regex = re.compile(r'(\d{4})-(\d{2})-(\d{2})')
+        match = date_regex.search(string)
+        if match:
+            year, month, day = match.groups()
+            return format_date(month, day, year)
+        else:
+            print("No date found in the string.")
+            return None
+    except Exception as error:
+        print(f"An error occurred while extracting the date. ERROR = {error}")
+        raise error
